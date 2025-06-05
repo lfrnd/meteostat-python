@@ -198,9 +198,10 @@ class TimeSeries(MeteoData):
                 self._data[f"{col}_flag"] = self._data[f"{col}_flag"].astype("string")
 
         # Reorder the DataFrame
-        self._data = self._data[
-            self._processed_columns + with_suffix(self._processed_columns, "_flag")
-        ]
+        columns = self._processed_columns
+        if self._flags:
+            columns.extend(with_suffix(self._processed_columns, "_flag"))
+        self._data = self._data[columns]
 
         # Remove model data from DataFrame
         if not model:
